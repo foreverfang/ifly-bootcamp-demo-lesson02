@@ -1,0 +1,21 @@
+{
+  "name": "ifly-bootcamp-course-platform",
+  "private": true,
+  "packageManager": "pnpm@10.32.0",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "test:utils": "pnpm --filter @repo/utils exec vitest run src/course-platform.test.ts",
+    "format": "biome format --write .",
+    "check": "biome check ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "turbo": "^2.5.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.2"
+  }
+}
