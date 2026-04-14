@@ -1,3 +1,5 @@
+import { createClient } from '@supabase/supabase-js'
+
 import { getSupabaseEnv } from './env'
 
 export function createServerSupabaseClient() {
@@ -11,8 +13,7 @@ export function createServerSupabaseClient() {
     throw new Error('Supabase environment variables are missing')
   }
 
-  return {
-    source: 'server' as const,
-    env: getSupabaseEnv(processEnv),
-  }
+  const { url, anonKey } = getSupabaseEnv(processEnv)
+
+  return createClient(url, anonKey)
 }

@@ -9,5 +9,4 @@ tmp-*.log
 .env
 .env.local
 .env.*.local
-pnpm-lock.yaml
 supabase/.temp

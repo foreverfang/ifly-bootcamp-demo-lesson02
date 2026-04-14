@@ -29,3 +29,20 @@ export const getDashboardLabel = (platformRoles: PlatformRole[]) => {
 
   return '学习中心'
 }
+
+export const getEnrollmentSummary = (
+  assignmentCount: number,
+  enrollmentCount: number,
+) => {
+  const assignmentLabel =
+    assignmentCount === 1 ? '1 assignment' : `${assignmentCount} assignments`
+  const enrollmentLabel =
+    enrollmentCount === 1 ? '1 enrollment' : `${enrollmentCount} enrollments`
+
+  return `${assignmentLabel} · ${enrollmentLabel}`
+}
+
+export const createSubmissionSnippet = (content: string, maxLength = 80) =>
+  content.length <= maxLength
+    ? content
+    : `${content.slice(0, Math.max(0, maxLength - 3))}...`

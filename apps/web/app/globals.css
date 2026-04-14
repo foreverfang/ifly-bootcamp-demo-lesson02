@@ -4,12 +4,34 @@
   color-scheme: light;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   min-height: 100vh;
   background: radial-gradient(
-      circle at top,
-      rgba(59, 130, 246, 0.14),
-      transparent 35%
-    ), linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+      circle at 12% 18%,
+      rgba(96, 165, 250, 0.2),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 84% 14%,
+      rgba(59, 130, 246, 0.16),
+      transparent 24%
+    ), linear-gradient(180deg, #f5f9ff 0%, #ebf2ff 48%, #f8fbff 100%);
   color: #0f172a;
+  font-feature-settings: "ss01" 1, "cv01" 1;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(circle at center, black 55%, transparent 100%);
+  pointer-events: none;
 }

@@ -2,7 +2,9 @@
 import {
   canManageCourse,
   canViewCourse,
+  createSubmissionSnippet,
   getDashboardLabel,
+  getEnrollmentSummary,
 } from './course-platform'
 
 describe('course platform shared domain contracts', () => {
@@ -30,5 +32,20 @@ describe('course platform shared domain contracts', () => {
     expect(getDashboardLabel(['admin'])).toBe('平台管理台')
     expect(getDashboardLabel(['teacher'])).toBe('教师工作台')
     expect(getDashboardLabel(['student'])).toBe('学习中心')
+  })
+
+  test('getEnrollmentSummary formats assignment and enrollment counts', () => {
+    expect(getEnrollmentSummary(2, 5)).toBe('2 assignments · 5 enrollments')
+    expect(getEnrollmentSummary(1, 1)).toBe('1 assignment · 1 enrollment')
+  })
+
+  test('createSubmissionSnippet truncates long submission content', () => {
+    expect(createSubmissionSnippet('short text', 20)).toBe('short text')
+    expect(
+      createSubmissionSnippet(
+        'This is a long reflection about the course project and its implementation details.',
+        24,
+      ),
+    ).toBe('This is a long reflec...')
   })
 })

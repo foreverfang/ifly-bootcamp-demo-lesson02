@@ -1,55 +1,93 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 
-import { getDashboardLabel } from '@repo/utils'
+import { getDashboardStats } from '@/lib/course-demo'
+import {
+  getErrorMessage,
+  isSupabaseSetupPending,
+} from '@/lib/course-demo-error'
+import styles from '../demo-ui.module.css'
 
-import { requireSignedInUser } from '@/lib/guards'
-import { getMockPlatformRoles } from '@/lib/mock-data'
+export const dynamic = 'force-dynamic'
 
-export default function DashboardPage() {
-  const user = requireSignedInUser()
-  const roles = getMockPlatformRoles()
+export default async function DashboardPage() {
+  try {
+    const stats = await getDashboardStats()
 
-  return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-8 px-6 py-16">
-      <header className="space-y-3">
-        <p className="text-sm font-medium uppercase tracking-[0.3em] text-slate-500">
-          Demo Dashboard
-        </p>
-        <h1 className="text-4xl font-semibold tracking-tight text-slate-950">
-          {getDashboardLabel(roles)}
-        </h1>
-        <p className="text-sm leading-6 text-slate-600">
-          Current demo user: {user.email}
-        </p>
-      </header>
+    return (
+      <main className={styles.page}>
+        <section className={`${styles.hero} ${styles.heroLight}`}>
+          <div className={styles.heroGrid}>
+            <header>
+              <p className={styles.eyebrow}>Live Backend Overview</p>
+              <h1 className={styles.heroTitle}>{'课程平台运行总览'}</h1>
+              <p className={styles.heroText}>
+                {
+                  '这里的统计数据直接来自 Supabase 中的课程、作业、报名和提交记录，可用来证明当前 demo 已经完成真实的前后端打通。'
+                }
+              </p>
+            </header>
+            <aside className={styles.heroAside}>
+              <div className={styles.asideCard}>
+                <p className={styles.asideTitle}>{'验证说明'}</p>
+                <p className={styles.asideBody}>
+                  {'报名和作业提交成功后，这里的数量会立即发生变化。'}
+                </p>
+              </div>
+            </aside>
+          </div>
+        </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
-        <article className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm">
-          <p className="text-sm text-slate-500">Monorepo stack</p>
-          <p className="mt-2 text-lg font-semibold text-slate-950">
-            pnpm + turborepo + monorepo
+        <section className={styles.statsGrid}>
+          <article className={styles.statCard}>
+            <p className={styles.infoLabel}>{'课程总数'}</p>
+            <p className={styles.sectionTitle}>{stats.courseCount}</p>
+            <p className={styles.sectionText}>
+              {'当前已接入可展示的课程条目。'}
+            </p>
+          </article>
+          <article className={styles.statCard}>
+            <p className={styles.infoLabel}>{'作业数'}</p>
+            <p className={styles.sectionTitle}>{stats.assignmentCount}</p>
+            <p className={styles.sectionText}>
+              {'支撑动态提交演示的作业配置数量。'}
+            </p>
+          </article>
+          <article className={styles.statCard}>
+            <p className={styles.infoLabel}>{'报名记录'}</p>
+            <p className={styles.sectionTitle}>{stats.enrollmentCount}</p>
+            <p className={styles.sectionText}>
+              {'由课程详情页报名表单实时写入。'}
+            </p>
+          </article>
+          <article className={styles.statCard}>
+            <p className={styles.infoLabel}>{'作业提交'}</p>
+            <p className={styles.sectionTitle}>{stats.submissionCount}</p>
+            <p className={styles.sectionText}>
+              {'提交成功后会立刻反映到这里。'}
+            </p>
+          </article>
+        </section>
+
+        <div>
+          <Link href="/courses" className={styles.buttonPrimary}>
+            {'返回课程列表'}
+          </Link>
+        </div>
+      </main>
+    )
+  } catch (error) {
+    return (
+      <main className={styles.page}>
+        <section className={styles.alert}>
+          <p className={styles.sectionEyebrow}>Live Backend Overview</p>
+          <h1 className={styles.alertTitle}>{'数据总览暂时不可用'}</h1>
+          <p className={styles.sectionText}>
+            {isSupabaseSetupPending(error)
+              ? 'Supabase 项目已经连接成功，但演示所需的数据表还没有创建完成。'
+              : getErrorMessage(error)}
           </p>
-        </article>
-        <article className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm">
-          <p className="text-sm text-slate-500">Frontend app</p>
-          <p className="mt-2 text-lg font-semibold text-slate-950">
-            Next.js + React + Tailwind
-          </p>
-        </article>
-        <article className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm">
-          <p className="text-sm text-slate-500">Backend layer</p>
-          <p className="mt-2 text-lg font-semibold text-slate-950">
-            Supabase Schema + Auth Boundary
-          </p>
-        </article>
-      </section>
-
-      <Link
-        href="/courses"
-        className="inline-flex w-fit items-center rounded-full border border-slate-300 px-5 py-3 text-sm font-medium text-slate-700"
-      >
-        Back to courses
-      </Link>
-    </main>
-  )
+        </section>
+      </main>
+    )
+  }
 }
